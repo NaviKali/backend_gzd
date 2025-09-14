@@ -1,0 +1,44 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  
+  
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+main{
+  padding: 10px;
+}
+
+*{
+  padding: 0px;
+  margin: 0px;
+}
+
+.MaxStyle{
+  width: 100vw;
+  height: 100vh;
+}
+
+.Shadow{
+  box-shadow: 0px 0px 10px 2px rgb(235, 235, 235) !important;
+}
+
+
+.card-view{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: left;
+  align-items: top;
+}
+.PagePacka{
+  margin-top: 10px;
+}
