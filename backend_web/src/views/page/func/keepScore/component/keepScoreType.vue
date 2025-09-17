@@ -1,8 +1,9 @@
 <template>
   <a-modal title="记分类型管理" width="80%">
+    <a-card class="Shadow">
     <a-button type="primary" ghost @click="addKeepScoreTypeModel = true">添加记分类型</a-button>
-    <a-button type="primary" danger v-if="selectedRowKeysData.length != 0" @click="HandleDelete">删除学生</a-button>
-
+    <a-button type="primary" danger v-if="selectedRowKeysData.length != 0" @click="HandleDelete">删除记分类型</a-button>
+  </a-card>
     <a-spin tip="加载中..." :spinning="Spinning">
       <!-- 表格视图 -->
       <a-table :row-selection="rowSelection" :columns="tableColumnsForKeepScoreType" :data-source="data" class="Shadow"

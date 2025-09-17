@@ -7,22 +7,25 @@
             </a-breadcrumb>
         </header>
         <header>
+            <a-button type="primary" @click="startKeepScoreModel = true">开始记分</a-button>
             <a-button type="primary" @click="keepScoreTypeModel = true">记分类型管理</a-button>
         </header>
     </main>
     <keepScoreTypeView v-model:open="keepScoreTypeModel"/> 
+    <startKeepScoreView v-model:open="startKeepScoreModel" />
 </template>
 <script setup lang="ts">
-import keepScoreTypeView from './component/keepScoreType.vue';
 import {ref} from 'vue'
+import keepScoreTypeView from './component/keepScoreType.vue';
+import startKeepScoreView from './component/startKeepScore.vue';
 
 
 const keepScoreTypeModel = ref<boolean>(false);
+const startKeepScoreModel= ref<boolean>(false);
 
 </script>
 <style scoped>
 header {
-    margin-top: 20px;
     margin-bottom: 20px;
 }
 

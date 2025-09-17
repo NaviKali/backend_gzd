@@ -1,8 +1,9 @@
 <template>
+    <img src="../assets//wallpaper/Messy-Room.jpg" alt="" class="wallpaper">
     <div class="MaxStyle LoginBlock">
         <a-card class="Shadow CardStyle" :title="subjectTitle + `后台登录`" :tab-list="tabList" :active-tab-key="key"
             @tabChange="key => onTabChange(key, 'key')">
-            <!-- <template #customTab="item">
+            <template #customTab="item">
                 <span v-if="item.key === tabList[0].key">
                     {{ item.tab }}
                     <LoginOutlined />
@@ -11,7 +12,7 @@
                     {{ item.tab }}
                     <SelectOutlined />
                 </span>
-            </template> -->
+            </template>
             <div>
                 <a-form v-if="key == tabList[0].key" :model="formState" name="basic" :label-col="{ span: 5 }"
                     :wrapper-col="{ span: 16 }" autocomplete="off" @finish="onFinish">
@@ -25,7 +26,8 @@
 
                     <a-form-item label="验证码" name="vcode" :rules="[{ required: true, message: '请输入验证码!' }]">
                         <a-input v-model:value="formState.vcode" placeholder="请输入验证码" />
-                        <img class="Shadow" :src="codeUrl" @click="getVerCode" alt="" style="width: 60%;margin-top: 20px;">
+                        <img class="Shadow" :src="codeUrl" @click="getVerCode" alt=""
+                            style="width: 60%;margin-top: 20px;">
                     </a-form-item>
 
                     <a-form-item :wrapper-col="{ offset: 18, span: 16 }">
@@ -34,6 +36,7 @@
                 </a-form>
             </div>
         </a-card>
+        <div class="LoginBlockBlur"></div>
         <a-float-button @click="handleOpenDocument" />
         <a-modal v-model:open="DocumentStatus" width="1000px" title="文档手册" cancelText="取消" @ok="handleOk">
             <p>如果需要请注册用户账号</p>
@@ -52,7 +55,7 @@ import { CreateWebUrl } from '~/server'
 interface FormState {
     account: string;
     password: string;
-    vcode:string;
+    vcode: string;
 }
 
 const newLogin = new Login()
@@ -61,7 +64,7 @@ const changeIsLoginPage: changeIsLoginPageType = inject("changeIsLoginPage")!;
 const changeRouter: changeRouterType = inject("changeRouter")!;
 const DocumentStatus = ref<boolean>(false);
 
-const codeUrl= ref<string>('');
+const codeUrl = ref<string>('');
 
 const tabList = ref<{
     key: string,
@@ -82,7 +85,7 @@ const key = ref<string>(tabList.value[0].key);
 const formState = reactive<FormState>({
     account: '',
     password: '',
-    vcode:''
+    vcode: ''
 });
 
 onMounted(() => {
@@ -119,30 +122,57 @@ const handleOk = (): void => {
     DocumentStatus.value = false
 }
 
-const getVerCode= ():void=>{
-    codeUrl.value = CreateWebUrl('Login.Login/getVerCode?id='+new Date().getTime())
+const getVerCode = (): void => {
+    codeUrl.value = CreateWebUrl('Login.Login/getVerCode?id=' + new Date().getTime())
 }
 
 </script>
 <style scoped>
+
+.wallpaper {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    object-fit: cover;
+}
+
 .ant-card {
+    transform: all 1s;
+    position: relative;
     width: 25%;
-    height: 50%;
+    height: 99%;
+    /* opacity: 0.8; */
     padding-top: 20px;
+    background-color: unset;
+    z-index: 10;
+    margin-right: 10px;
+    border: unset;
+    border: 4px solid white;
+}
+
+.LoginBlockBlur {
+    margin-right: 10px;
+    width: 25%;
+    height: 100%;
+    position: absolute;
+    backdrop-filter: blur(20px);
+    z-index: 5;
+    padding-top: 20px;
+    background-color: unset;
+
 }
 
 .LoginBlock {
     display: flex;
-    justify-content: center;
+    justify-content: right;
     align-content: center;
     align-items: center;
 }
 
-.CardStyle{
+.CardStyle {
     display: flex;
     flex-direction: column;
     justify-content: top;
     align-items: center;
 }
-
 </style>

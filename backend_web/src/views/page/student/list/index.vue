@@ -35,6 +35,7 @@
                 </a-collapse-panel>
                 <a-collapse-panel key="do" header="功能" :show-arrow="false">
                     <a-button @click="handleChangeView">切换视图</a-button>
+                    <a-button @click="echarttDialogModel = true">图表</a-button>
                 </a-collapse-panel>
             </a-collapse>
         </header>
@@ -43,7 +44,7 @@
             <a-table :row-selection="rowSelection" :columns="tableColumns" :data-source="data" class="Shadow"
                 :scroll="{ x: 'calc(700px + 50%)', y: 500 }"
                 v-if="userInfo().getUserConfig.user_config_view_model == VIEW_MODEL_TABLE" :pagination="false">
-                <template #bodyCell="{ column, text }">
+                <template #bodyCell="{ column, text, record }">
                     <template v-if="column.dataIndex == 'student_name'">
                         <a-tag>
                             <template #icon>
@@ -66,7 +67,7 @@
                         <a-tag color="processing">{{ text }}</a-tag>
                     </template>
                     <template v-if="column.dataIndex == 'operation'">
-                        <a-button type="primary">详情</a-button>
+                        <a-button type="primary" @click="showItem(record)">详情</a-button>
                     </template>
                 </template>
             </a-table>
@@ -101,6 +102,8 @@
             </a-card>
         </a-spin>
         <addDialogView v-model:open="addDialogModel" @HandleAddSuccess="HandleSuccess" />
+        <itemDialogView v-model:open="itemDialogModel" :guid="itemGuid" @handleSuccess="HandleSuccess" />
+        <echarttDialogView v-model:open="echarttDialogModel" />
     </main>
 </template>
 <script setup lang="ts">
@@ -112,10 +115,15 @@ import { isRequestSuccess } from '~/server';
 import cardView from "~/components/cardView.vue";
 import pagination from '~/components/pagination.vue';
 import addDialogView from './component/addDialog.vue';
+import itemDialogView from './component/itemDialog.vue';
+import echarttDialogView from './component/echarttDialog.vue';
 import { debounce } from 'lodash-es'
 
 
 const addDialogModel = ref<boolean>(false);
+const itemDialogModel = ref<boolean>(false);
+const echarttDialogModel = ref<boolean>(false);
+const itemGuid = ref<string>('');
 
 const activeKey = ref<string>("where");
 const Spinning = ref<boolean>(false);
@@ -153,6 +161,14 @@ const HandleSuccess = (status: boolean): void => {
     if (status)
         getStudentListFetch()
 }
+
+
+const showItem = (record: getStudentList.Data) => {
+    itemGuid.value = record.student_guid
+    itemDialogModel.value = true
+}
+
+
 
 /**
  * 分页操作
@@ -219,7 +235,9 @@ const handleChangeView = (): void => {
  * 
  * @returns void
  */
-const HandleDeleteStudent = (guid: string = ''): void => {
+const HandleDeleteStudent = (_: any, guid: string | null = null): void => {
+    console.log(guid);
+
     Spinning.value = true
     deleteStudent.fetch({
         student_guid: guid ? Array(guid) : selectedRowKeysData.value.map(
@@ -250,7 +268,7 @@ const handleCardClick = (_: any): void => { };
  * @returns void
  */
 const handleCardDelete = async (item: getStudentList.Data): Promise<void> => {
-    HandleDeleteStudent(item.student_guid)
+    HandleDeleteStudent(null, item.student_guid)
 };
 
 /**

@@ -6,10 +6,14 @@ export namespace getStudentList {
     export const url: string = CreateWebUrl("Student.Student/getStudentList")
 
     export type params = {
+        student_name?: string | String
+        student_sex?: number | Number
+        student_number?: string | String,
+        isAll?:boolean|Boolean
     }
 
     export type Data = {
-        key:number,
+        key: number,
         student_guid: string,
         student_number: string,
         student_name: string,

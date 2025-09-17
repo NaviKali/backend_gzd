@@ -9,6 +9,11 @@ export namespace getStudentKeepscoreTypeList {
     }
 
     export type Data = {
+        key:string|String,
+        student_keepscore_type_guid:string|String,
+        student_keepscore_type_name:string|String,
+        keepscore_num:number|Number,
+        create_datetime:string|String
     }
 
     export type returnResponse = BaseResponse & {
