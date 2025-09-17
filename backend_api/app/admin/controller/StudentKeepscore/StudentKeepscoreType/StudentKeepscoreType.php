@@ -7,6 +7,7 @@ use app\Request;
 use think\response\Json;
 use app\admin\model\StudentKeepscore\StudentKeepscoreType\StudentKeepscoreType as ModelStudentKeepscoreType;
 use app\admin\verification\StudentKeepscore\StudentKeepscoreType\StudentKeepscoreType as verificationStudentKeepscoreType;
+use app\admin\model\StudentKeepscore\StudentKeepscore as ModelStudentKeepscore;
 
 class StudentKeepscoreType extends Base
 {
@@ -39,7 +40,11 @@ class StudentKeepscoreType extends Base
             $find = $this->model->where('student_keepscore_type_guid', $v)->find();
             if (!$find)
                 return $this->ApiError("没有找到对应记分类型!");
+            //*删除记分数据
+            (new ModelStudentKeepscore)->handleDeleteData($v);
+            //*删除类型
             $find->delete();
+
         }
 
         return $this->Success("删除成功!");

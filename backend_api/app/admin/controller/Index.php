@@ -3,8 +3,6 @@ namespace app\admin\controller;
 
 use app\Base;
 use app\Request;
-use app\void\header;
-use app\Tool;
 
 class Index extends Base
 {
@@ -17,6 +15,28 @@ class Index extends Base
         //   die();
 
     }
+
+    /**
+     * 获取Wallpaper图片
+     * 
+     * @access public
+     * @api index/getWallpaperImage
+     * @return string
+     */
+    public function getWallpaperImage(): string
+    {
+
+        $url = root_path() . "public/upload/wallpaper/";
+        $allImage = glob($url . "*");
+        $arr = [];
+        foreach ($allImage as $k => $v) {
+            $v = str_replace($url, "", $v);
+            array_push($arr, $v);
+        }
+
+        return $arr[rand(0, count($arr) - 1)];
+    }
+
     /**
      * 获取前台切换背景的所有图片
      * @static
@@ -31,7 +51,7 @@ class Index extends Base
             $v = str_replace($url, "", $v);
             array_push($arr, $v);
         }
-        return $this->success("获取成功!",$arr);
+        return $this->success("获取成功!", $arr);
     }
     /**
      * 获取前台背景所有图片
@@ -45,7 +65,7 @@ class Index extends Base
             $v = str_replace($url, "", $v);
             array_push($arr, $v);
         }
-        return $this->success("获取成功!",$arr);
+        return $this->success("获取成功!", $arr);
     }
 
 }

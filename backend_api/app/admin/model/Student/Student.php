@@ -1,9 +1,11 @@
 <?php
 namespace app\admin\model\Student;
 
+use app\Base;
 use app\DictionaryMap;
 use think\Model;
 use think\model\concern\SoftDelete;
+use app\admin\model\StudentKeepscore\StudentKeepscore as ModelStudentKeepscore;
 
 class Student extends Model
 {
@@ -13,10 +15,10 @@ class Student extends Model
       protected $schema = [
             'student_id' => "int",
             'student_guid' => "varchar",
-            'student_number'=>"varchar",
+            'student_number' => "varchar",
             'student_name' => "varchar",
             'student_sex' => "int",
-            'student_score_count'=>'int',
+            'student_score_count' => 'int',
             'create_datetime' => "datetime",
             'update_datetime' => "datetime",
             'delete_datetime' => "datetime",
@@ -40,7 +42,22 @@ class Student extends Model
        */
       public function getStudentSexAttr($value): array
       {
-            return ["value"=>$value,"text"=>DictionaryMap::getAdminDictionaryMap()["student"]["student_sex"][$value]] ;
+            return ["value" => $value, "text" => DictionaryMap::getAdminDictionaryMap()["student"]["student_sex"][$value]];
+      }
+
+      /**
+       * 处理学生记分
+       * 
+       * @access public
+       * @return void
+       */
+      public function handleStudentScoreCount(string $studentNumber, int $score): void
+      {
+            $find = $this->where('student_number', $studentNumber)->find();
+            if (!$find)
+                   (new Base())->ApiError("没有找到对应学生!");
+
+            $find->inc("student_score_count", $score)->save();
       }
 
       public static function onAfterRead()
@@ -59,8 +76,8 @@ class Student extends Model
       {
 
       }
-      public static function onBeforeInsert(mixed $data):void
+      public static function onBeforeInsert(mixed $data): void
       {
-          self::handleAddGuid($data);
+            self::handleAddGuid($data);
       }
 }

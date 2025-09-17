@@ -18,6 +18,8 @@ class Base extends BaseController
      */
     final public function PagePacka(mixed $query,array $params): mixed
     {
+        if(isset($params["isAll"]) and is_bool($params["isAll"]) and $params["isAll"])  return $query;
+
         $params["page"] = empty($params["page"]) ? 1 : $params["page"];
         $params["limit"] = empty($params["limit"]) ? 10 : $params["limit"];
 
