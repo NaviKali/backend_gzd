@@ -3,12 +3,12 @@
 namespace app;
 
 use Fiber;
-use think\Model;
 use app\Tool;
 
 
 class Base extends BaseController
 {
+    protected $middleware = ['token'];
     /**
      * Page包装器
      * @access public

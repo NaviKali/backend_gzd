@@ -4,7 +4,6 @@ namespace app\admin\middleware;
 
 use app\admin\model\Token as TokenModel;
 use app\Base;
-use think\App;
 use app\Tool;
 
 class token extends Base

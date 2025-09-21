@@ -2,13 +2,13 @@
 // 全局中间件定义文件
 return [
   // 全局请求缓存
-  // \think\middleware\CheckRequestCache::class,
+  \think\middleware\CheckRequestCache::class,
   // 多语言加载
   // \think\middleware\LoadLangPack::class,
   // Session初始化
   \think\middleware\SessionInit::class,
   //Token验证
-  app\admin\middleware\token::class,
+  // app\admin\middleware\token::class,
   //路由虚幻
   // app\admin\middleware\RouterUnreal::class,
 ];
