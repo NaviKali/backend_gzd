@@ -25,7 +25,8 @@
         "topthink/think-orm": "^3.0",
         "topthink/think-filesystem": "*",
         "topthink/think-multi-app": "^1.0",
-        "topthink/think-captcha": "*"
+        "topthink/think-captcha": "*",
+        "topthink/think-view": "*"
     },
     "require-dev": {
         "topthink/think-trace": "^1.0"

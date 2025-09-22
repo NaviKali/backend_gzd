@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>小组记分</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://{$resource}/bootstrap.min.css">
+  <scrpt src="http://{$resource}/popper.min.js"></scrpt>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+  <script src="http://{$resource}/jquery.min.js"></script>
+</head>
+<style>
+  body {
+    padding: 50px;
+  }
+
+  .card {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+  }
+
+  .card-body div {
+    margin-top: 10px;
+  }
+.submit_content{
+  color: rgb(7, 190, 7);
+}
+
+</style>
+
+<body>
+  <div class="card">
+    <span id="info"></span>
+  </div>
+  <div class="card" style="margin-top: 10px;">
+    <div class="card-body">
+      <h3>操作功能</h3>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#KeepScore">
+        小组长记分
+      </button>
+    </div>
+  </div>
+
+  <div class="modal fade" id="KeepScore">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">小组长记分</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          {foreach $Data['students'] as $k => $v}
+          <div class="card" style="margin-top: 20px;">
+            <div class="card-header">{$v['student_name']}({$v['student_number']})</div>
+            <div class="card-body">
+              <div>
+                <label class="form-label">选择记分类型:</label>
+                <select class="form-select keepscore_type" id="select_keepscore_type" name="select_keepscore_type_{$k}">
+                  {foreach $Data['student_keepscore_type'] as $type_k => $type_v}
+                  <option value="{$type_v['student_keepscore_type_guid']}">
+                    {$type_v['student_keepscore_type_name']}(+{$type_v['keepscore_num']})</option>
+                  {/foreach}
+                </select>
+              </div>
+              <div>
+                <label class="form-label">次数:</label>
+                <input type="number" class="form-control Count" placeholder="请输入次数" aria-label="count" value="0" min="0"
+                  max="10">
+              </div>
+              <div>
+                <button type="button" class="btn btn-outline-primary submit"
+                  onclick='submit({$v["student_number"]},{$k})' >提交</button>
+                  <p class="submit_content"></p>
+              </div>
+            </div>
+          </div>
+          {/foreach}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">关闭</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
+<script>
+  let info = document.getElementById("info")
+  let storge = JSON.parse(localStorage.getItem("STUDENT"))
+
+
+  document.body.onload = function () {
+    init()
+  }
+
+  function init() {
+    if (localStorage.getItem("STUDENT") == undefined || localStorage.getItem("STUDENT") == null)
+      location.href = "./index"
+
+    info.innerHTML = `欢迎回来,${storge.student_name}(${storge.student_number})`
+  }
+
+
+  function submit(data, index) {
+    let count = document.getElementsByClassName('Count')[index].value
+    let type_guid = document.getElementsByClassName('keepscore_type')[index].value
+    let date = new Date()
+    let submit = document.getElementsByClassName('submit')
+    let submit_content =document.getElementsByClassName('submit_content')
+
+
+    $.ajax({
+      type: 'POST',
+      url: "http://{$request}/public/user.php/KeepScore.KeepScore/addStudentKeepscore",
+      dataType: 'json',
+      data: {
+        count: Number(count),
+        student_number: data,
+        student_keepscore_type_guid: type_guid,
+        student_keepscore_date: `${date.getFullYear()}/${date.getMonth()}/${date.getDay()}`
+      },
+      success: function (resp) {
+        if (resp.code == 200) {
+          submit[index].style.display = 'none'
+          submit_content[index].innerHTML = '提交成功'
+        } else {
+          Error(resp.message)
+        }
+      },
+    })
+
+
+  }
+
+
+</script>
